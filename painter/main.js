@@ -77,7 +77,7 @@ init().then(async () => {
   let updating = false
 
   function update() {
-    if (updating) {
+    if (updating || snake.is_hit()) {
       return
     }
     updating = true
