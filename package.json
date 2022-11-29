@@ -1,0 +1,21 @@
+{
+  "name": "rust-snake",
+  "version": "1.0.0",
+  "description": "greedy snake game via vite &amp; wasm(rust)",
+  "main": "index.js",
+  "scripts": {
+    "dev": "cd painter && npm run dev",
+    "boot": "npm run build-wasm && cd painter && npm install",
+    "build-wasm": "cd wasm && rm -rf pkg && wasm-pack build --target web"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sun0day/rust-snake.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sun0day/rust-snake/issues"
+  },
+  "homepage": "https://github.com/sun0day/rust-snake#readme"
+}
