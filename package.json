@@ -4,8 +4,8 @@
   "description": "greedy snake game via vite &amp; wasm(rust)",
   "main": "index.js",
   "scripts": {
-    "dev": "cd painter && npm run dev",
-    "boot": "npm run build-wasm && cd painter && npm install",
+    "dev": "cd ui && npm run dev",
+    "boot": "npm run build-wasm && cd ui && npm install",
     "build-wasm": "cd wasm && rm -rf pkg && wasm-pack build --target web"
   },
   "repository": {

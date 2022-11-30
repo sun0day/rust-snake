@@ -10,9 +10,11 @@ function sleep(time) {
 const row = 30
 const col = 40
 
-const painter = new Painter(row, col)
+const painter = new Painter(row, col);
 
-init().then(async () => {
+(async () => {
+  await init()
+
   const controller = new Controller(row, col, painter)
 
   document.addEventListener('keydown', e => {
@@ -28,4 +30,6 @@ init().then(async () => {
   }, false)
 
   controller.move({ force: true })
-})
+})()
+
+
