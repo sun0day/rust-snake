@@ -1,11 +1,12 @@
 import { Snake } from 'snake-wasm'
+import { Painter } from './painter';
 
 export class Controller {
-  constructor(row, col, painter) {
+  constructor(row, col) {
     this.row = row
     this.col = col
     this.snake = Snake.new(row, col);
-    this.painter = painter
+    this.painter = new Painter(row, col);
     this.food = this.genFood(row, col)
     this.direction = "RIGHT"
     this.updating = false

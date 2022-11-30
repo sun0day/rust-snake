@@ -16,3 +16,5 @@ $ npm run boot
 ```shell
 $ npm run dev
 ```
+
+> press Space to start
