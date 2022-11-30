@@ -2,7 +2,6 @@
   box-sizing: border-box;
 }
 
-
 body {
   margin: 0;
   display: flex;
@@ -12,17 +11,56 @@ body {
 }
 
 #app {
+  margin: 0 auto;
+  text-align: center;
+}
+
+.snake-btn {
+  margin-bottom: 14px;
+}
+
+.snake-btn button {
+  background-color: #213547;
+  border-radius: 8px;
+  border-style: none;
+  box-sizing: border-box;
+  color: #ffffff;
+  cursor: pointer;
+  display: inline-block;
+  font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial,
+    sans-serif;
+  font-size: 20px;
+  height: 40px;
+  line-height: 20px;
+  list-style: none;
+  margin: 0;
+  outline: none;
+  padding: 10px 20px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  transition: color 100ms;
+  vertical-align: baseline;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.snake-btn button:hover {
+  background-color: #213547dd;
+}
+
+.snake-painter {
   display: grid;
   grid-template-rows: repeat(30, 20px);
   grid-template-columns: repeat(40, 20px);
   width: 800px;
   height: 600px;
-  margin: 0 auto;
-  text-align: center;
+
   background-color: #213547;
 }
 
-#app div {
+.snake-painter div {
   display: inline-block;
 }
 
