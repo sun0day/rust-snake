@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:robot": "VITE_ROBOT=1 vite",
     "build": "vite build",
     "preview": "vite preview"
   },

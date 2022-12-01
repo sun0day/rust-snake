@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "cd ui && npm run dev",
+    "dev:robot": "cd ui && npm run dev:robot",
     "boot": "npm run build-wasm && cd ui && npm install",
     "build-wasm": "cd wasm && rm -rf pkg && wasm-pack build --target web"
   },

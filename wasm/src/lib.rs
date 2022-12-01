@@ -1,6 +1,7 @@
 mod utils;
 
 use js_sys::Array;
+use std::option::Option;
 use wasm_bindgen::prelude::*;
 
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
@@ -11,15 +12,15 @@ static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
 #[wasm_bindgen]
 pub struct Snake {
-    area: (u32, u32),
-    body: Vec<(u32, u32)>,
-    last_tail: (u32, u32),
+    area: (usize, usize),
+    body: Vec<(usize, usize)>,
+    last_tail: (usize, usize),
 }
 
 #[wasm_bindgen]
 impl Snake {
-    pub fn new(width: u32, height: u32) -> Snake {
-        let head = (width / 2, height / 2);
+    pub fn new(rows: usize, cols: usize) -> Snake {
+        let head = (rows / 2, cols / 2);
         let mut body = vec![head];
 
         for i in 1..5 {
@@ -29,13 +30,13 @@ impl Snake {
         let last_tail = body[body.len() - 1];
 
         Snake {
-            area: (width, height),
+            area: (rows, cols),
             body: body,
             last_tail: last_tail,
         }
     }
 
-    pub fn update_pos(&mut self, direction: String) {
+    pub fn move_pos(&mut self, direction: String) {
         let mut last = self.body[0];
         let length = self.body.len();
 
@@ -56,7 +57,7 @@ impl Snake {
         }
     }
 
-    pub fn eat(&mut self, foodX: u32, foodY: u32) -> bool {
+    pub fn eat(&mut self, foodX: usize, foodY: usize) -> bool {
         let head = self.body[0];
 
         if head.0 == foodX && head.1 == foodY {
@@ -95,5 +96,79 @@ impl Snake {
         }
 
         arr
+    }
+
+    pub fn auto_move_pos(&mut self, foodX: usize, foodY: usize) {
+        let direction = self.get_next_move_to_food(foodX, foodY);
+
+        self.move_pos(direction);
+    }
+
+    fn get_next_move_to_food(&mut self, foodX: usize, foodY: usize) -> String {
+        utils::set_panic_hook();
+        let head = self.body[0];
+        let mut pos_queue = vec![head];
+        let mut pos_map = self.init_pos_map();
+        let mut pos = head;
+
+        let update_pos_map = |pos: (usize, usize),
+                              next_pos: (usize, usize),
+                              pos_queue: &mut Vec<(usize, usize)>,
+                              pos_map: &mut Vec<Vec<[usize; 3]>>| {
+            if next_pos.0 < 0
+                || next_pos.0 >= self.area.0
+                || next_pos.1 < 0
+                || next_pos.1 >= self.area.1
+            {
+                return;
+            }
+            if pos_map[next_pos.0][next_pos.1][2] == 0 {
+                pos_map[next_pos.0][next_pos.1] = [pos.0, pos.1, 1];
+                pos_queue.push(next_pos);
+            }
+        };
+
+        while pos_queue.len() > 0 {
+            pos = pos_queue.remove(0);
+            if pos.0 == foodX && pos.1 == foodY {
+                break;
+            }
+
+            update_pos_map(pos, (pos.0 + 1, pos.1), &mut pos_queue, &mut pos_map);
+            update_pos_map(pos, (pos.0 - 1, pos.1), &mut pos_queue, &mut pos_map);
+            update_pos_map(pos, (pos.0, pos.1 + 1), &mut pos_queue, &mut pos_map);
+            update_pos_map(pos, (pos.0, pos.1 - 1), &mut pos_queue, &mut pos_map);
+        }
+
+        while pos_map[pos.0][pos.1][0] != head.0 || pos_map[pos.0][pos.1][1] != head.1 {
+            pos = (pos_map[pos.0][pos.1][0], pos_map[pos.0][pos.1][1]);
+        }
+
+        String::from(if pos.0 < head.0 {
+            "UP"
+        } else if pos.0 > head.0 {
+            "DOWN"
+        } else if pos.1 < head.1 {
+            "LEFT"
+        } else if pos.1 > head.1 {
+            "RIGHT"
+        } else {
+            "DOWN"
+        })
+    }
+
+    fn init_pos_map(&self) -> Vec<Vec<[usize; 3]>> {
+        let head = self.body[0];
+        let mut map = Vec::with_capacity(self.area.0);
+
+        for i in 0..self.area.0 {
+            map.push(vec![[head.0, head.1, 0]; self.area.1]);
+        }
+
+        for body in &self.body {
+            map[body.0][body.1] = [head.0, head.1, 1];
+        }
+
+        map
     }
 }

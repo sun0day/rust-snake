@@ -9,25 +9,26 @@ function sleep(time) {
 
 const row = 30
 const col = 40
+const isRobot = !!import.meta.env['VITE_ROBOT']
 
   ; (async () => {
     await init()
 
-    const controller = new Controller(row, col)
+    const controller = new Controller(row, col, isRobot)
 
     document.addEventListener('keydown', e => {
       if (e.code === 'Space') {
         controller.pauseOrResume()
       }
 
-      if (/Arrow/.test(e.code)) {
+      if (!isRobot && /Arrow/.test(e.code)) {
         const nextDirection = e.code.replace('Arrow', '').toUpperCase()
 
         controller.move({ nextDirection })
       }
     }, false)
 
-    controller.move({ force: true })
+    controller[isRobot ? 'autoMove' : 'move']({ force: true })
   })()
 
 
